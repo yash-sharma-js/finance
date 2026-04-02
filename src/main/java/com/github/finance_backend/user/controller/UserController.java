@@ -20,7 +20,7 @@ public class UserController {
         return "200 Status";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody UserRequestDTO request) {
         try {
             return ResponseEntity.ok(userService.register(request));
@@ -29,14 +29,18 @@ public class UserController {
         }
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody UserRequestDTO request){
-        return null;
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> login(@RequestBody UserRequestDTO request) {
+        try {
+            return ResponseEntity.ok(userService.login(request));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/users")
-    public Object getAllUsers() {
-        return null;
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @PatchMapping("/users/{id}/role")

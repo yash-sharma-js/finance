@@ -21,7 +21,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserResponseDTO toDto(UserEntity entity){
+    public UserResponseDTO  toDto(UserEntity entity){
         return UserResponseDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
