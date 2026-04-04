@@ -35,7 +35,7 @@ public class DashboardService {
 
         Double net = income - expense;
 
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new LinkedHashMap<>();
         result.put("totalIncome", income);
         result.put("totalExpense", expense);
         result.put("netBalance", net);
@@ -53,7 +53,7 @@ public class DashboardService {
         List<Map<String, Object>> result = new ArrayList<>();
 
         for (Object[] row : data) {
-            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> map = new LinkedHashMap<>();
             map.put("category", row[0]);
             map.put("total", row[1]);
             result.add(map);
@@ -67,9 +67,45 @@ public class DashboardService {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return dashboardRepository.findTop5ByUserOrderByDateDesc(user)
+        return dashboardRepository.findTop5ByUserAndDeletedFalseOrderByDateDesc(user)
                 .stream()
                 .map(recordMapper::toResponse)
                 .toList();
+    }
+
+    public List<Map<String, Object>> getMonthlyTrends(String email) {
+
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Object[]> data = dashboardRepository.getMonthlyTrends(user);
+
+        // Consolidate rows into month-level entries with income + expense
+        Map<String, Map<String, Object>> monthMap = new LinkedHashMap<>();
+
+        for (Object[] row : data) {
+            int year = (int) row[0];
+            int month = (int) row[1];
+            RecordType type = (RecordType) row[2];
+            Double total = (Double) row[3];
+
+            String key = String.format("%d-%02d", year, month);
+
+            monthMap.computeIfAbsent(key, k -> {
+                Map<String, Object> entry = new LinkedHashMap<>();
+                entry.put("month", k);
+                entry.put("income", 0.0);
+                entry.put("expense", 0.0);
+                return entry;
+            });
+
+            if (type == RecordType.INCOME) {
+                monthMap.get(key).put("income", total);
+            } else {
+                monthMap.get(key).put("expense", total);
+            }
+        }
+
+        return new ArrayList<>(monthMap.values());
     }
 }

@@ -38,4 +38,9 @@ public class DashboardController {
     public ResponseEntity<List<RecordResponseDTO>> getRecent() {
         return ResponseEntity.ok(dashboardService.getRecentRecords(getEmail()));
     }
+
+    @GetMapping("/trends")
+    public ResponseEntity<List<Map<String, Object>>> getTrends() {
+        return ResponseEntity.ok(dashboardService.getMonthlyTrends(getEmail()));
+    }
 }

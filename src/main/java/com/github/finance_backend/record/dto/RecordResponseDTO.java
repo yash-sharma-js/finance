@@ -4,6 +4,7 @@ import com.github.finance_backend.record.enums.RecordType;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,4 +18,6 @@ public class RecordResponseDTO {
     private String category;
     private LocalDate date;
     private String note;
+    private String createdBy;
+    private LocalDateTime createdAt;
 }

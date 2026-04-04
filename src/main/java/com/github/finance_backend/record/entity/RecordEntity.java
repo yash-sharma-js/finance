@@ -36,5 +36,8 @@ public class RecordEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    @Builder.Default
+    private boolean deleted = false;
+
     private LocalDateTime createdAt;
 }

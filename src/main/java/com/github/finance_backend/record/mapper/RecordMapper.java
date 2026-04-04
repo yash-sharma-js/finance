@@ -31,6 +31,8 @@ public class RecordMapper {
                 .category(record.getCategory())
                 .date(record.getDate())
                 .note(record.getNote())
+                .createdBy(record.getUser().getEmail())
+                .createdAt(record.getCreatedAt())
                 .build();
     }
 }

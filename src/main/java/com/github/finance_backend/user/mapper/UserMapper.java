@@ -21,13 +21,14 @@ public class UserMapper {
                 .build();
     }
 
-    public UserResponseDTO  toDto(UserEntity entity){
+    public UserResponseDTO toDto(UserEntity entity){
         return UserResponseDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .email(entity.getEmail())
                 .role(entity.getRole())
                 .isActive(entity.isActive())
+                .createdAt(entity.getCreatedAt())
                 .build();
     }
 }

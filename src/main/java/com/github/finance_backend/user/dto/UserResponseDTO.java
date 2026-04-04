@@ -1,8 +1,9 @@
 package com.github.finance_backend.user.dto;
 
 import com.github.finance_backend.user.enums.Role;
-import jakarta.persistence.Entity;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,4 +16,5 @@ public class UserResponseDTO {
     private String email;
     private Role role;
     private boolean isActive;
+    private LocalDateTime createdAt;
 }
